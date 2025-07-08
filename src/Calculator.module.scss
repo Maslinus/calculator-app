@@ -1,0 +1,122 @@
+/* Calculator.module.scss */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--bg);
+  transition: background-color 1s;
+}
+
+.dark {
+  --bg: #121212;
+  --calculator-bg: #1e1e1e;
+  --display-bg: #333;
+  --display-color: #ffffff;
+  --button-bg: #333;
+  --button-color: #fff;
+  --operator-bg: #ff9500;
+  --gray-bg: #a5a5a5;
+} 
+
+:global(:root) {
+  --bg: #f1f2f3;
+  --calculator-bg: #ffffff;
+  --display-bg: #e0e0e0;
+  --display-color: #000000;
+  --button-bg: #e0e0e0;
+  --button-color: #000;
+  --operator-bg: #f5923e;
+  --gray-bg: #d4d4d2;
+}
+
+.calculator {
+  background-color: var( --calculator-bg);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 320px;
+  transition: background-color 1s, color 1s;
+}
+
+.themeToggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.display {
+  background-color: var(--display-bg);
+  color: var(--display-color);
+  padding: 20px;
+  font-size: 2rem;
+  border-radius: 8px;
+  text-align: right;
+  min-height: 50px;
+  word-wrap: break-word;
+  transition: background-color 1s, color 1s;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.button {
+  background-color: var(--button-bg);
+  color: var(--button-color);
+  padding: 20px;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 1s, transform 0.1s;
+}
+
+.button:active,
+.active {
+  transform: scale(0.95);
+}
+
+.operator {
+  background-color: var(--operator-bg);
+  color: #fff;
+}
+
+.gray {
+  background-color: var(--gray-bg);
+  color: #000;
+}
+
+.zero {
+  grid-column: span 2;
+}
+
+.expression {
+  font-size: 1rem;
+  color: gray;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: right;
+  scrollbar-width: thin;
+  scrollbar-color: #999 transparent;
+}
+
+.expression::-webkit-scrollbar {
+  height: 6px;
+}
+
+.expression::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 3px;
+}
