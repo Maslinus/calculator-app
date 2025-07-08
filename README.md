@@ -1,69 +1,91 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 📱 React Calculator
 
-Currently, two official plugins are available:
+Простой калькулятор с поддержкой операций `+`, `-`, `×`, `÷`, процентов, смены темы и управления с клавиатуры.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🔗 Ссылка на репозиторий
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+https://github.com/Maslinus/calculator-app
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🚀 Инструкция по запуску
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/Maslinus/calculator-app.git
+cd react-calculator
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Проект откроется по адресу `http://localhost:5173` (если используется Vite).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 💡 Почему я сделал так
+
+Я использовал хуки React (useState, useEffect) для управления основными частями состояния калькулятора:
+
+input — текущее вводимое число
+
+operand — первый операнд, сохранённый перед вводом оператора
+
+operator — математический оператор (+, -, ×, ÷)
+
+result — результат последнего вычисления
+
+expression — строка выражения, которая отображается в верхней части дисплея
+
+theme — светлая или тёмная тема
+
+activeKey — активная клавиша для визуальной обратной связи при нажатии с клавиатуры
+
+Это позволило четко контролировать поведение калькулятора и избежать сложных вычислений «на лету» при каждом ререндере.
+
+#### Отображение выражения и результата
+
+Я решил отделить логически выражение (expression) и результат (result) от текущего ввода:
+
+Это даёт пользователю визуальную историю: 25 + 5 = будет показано отдельно сверху, а результат — внизу.
+
+result сохраняется в отдельной переменной, чтобы:
+
+* использовать его как основу для следующей операции;
+
+* не затирать input, пока пользователь не начнёт новый ввод.
+
+#### Работа оператора %
+Процентная операция реализована в логике, как у реальных калькуляторов, а не как остаток от деления:
+
+Если есть оператор и первый операнд — % считается от первого операнда.
+
+Пример: 200 × 10 % → 20 (а не 0.1)
+
+Если нет оператора — просто input / 100
+
+Такое поведение соответствует ожиданиям большинства пользователей.
+
+#### Поддержка клавиатуры
+Добавлена поддержка ввода с клавиатуры через useEffect, чтобы улучшить UX:
+
+window.addEventListener('keydown', handleKey);
+Клавиши вроде Enter, Escape, *, /, +, -, . и цифры преобразуются в действия калькулятора.
+
+### Архитектура
+
+* Проект написан на **React** (`useState`, `useEffect`).
+* Вся логика калькулятора инкапсулирована в одном компоненте `Calculator`.
+* Стили вынесены в отдельный `SCSS`-модуль для изоляции (`Calculator.module.scss`).
+
+### Стили и темы
+
+* Поддержка **светлой и тёмной темы** (с переключением).
+* Использованы кастомные классы и логика подсветки активных кнопок/клавиш.
+
+### Сложные моменты
+
+* Обработка оператора `%`: реализован как **процент от предыдущего числа**, а не просто `value / 100`.
+* Поддержка **клавиатурного ввода**, включая `Enter`, `Escape`, `*`, `/`, `+`, `-`, `.` и цифры.
+* Хранение последнего результата в `result` и отображение его как текущего `input`, чтобы позволить выполнять цепочки операций, как в обычных калькуляторах.
